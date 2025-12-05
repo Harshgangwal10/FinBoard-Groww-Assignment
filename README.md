@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Finance Dashboard Builder
 
-## Getting Started
+A fully-responsive Finance Dashboard Builder built with **Next.js 15+**,
+**TypeScript**, **TailwindCSS**, **shadcn/ui**, **Zustand**, and **Chart.js**.
 
-First, run the development server:
+FinBoard enables users to create their own finance monitoring dashboard by
+connecting to APIs and displaying real-time financial data through modular widgets.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔗 Live Demo  
+ **[Live Demo](https://your-vercel-url.vercel.app/](https://financedashboard-8hmhtrfe8-harshs-projects-87f7c4b0.vercel.app/))**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+------------------------------------------------------------------------
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##  Tech Stack
 
-## Learn More
+-   **Next.js 15+**
+-   **TypeScript**
+-   **TailwindCSS**
+-   **shadcn/ui** (for accessible UI components)
+-   **Zustand** (for central state management with persistence)
+-   **Chart.js** (Candle, Bar, Line charts)
+-   **Vercel** for deployment
 
-To learn more about Next.js, take a look at the following resources:
+------------------------------------------------------------------------
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Features Implemented
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✔ **Add, update, delete widgets**
 
-## Deploy on Vercel
+✔  **Widget types supported**:
+    - Charts - Candle (built with Chart.js)
+    - Tables - auto-mapped from API arrays
+    - Cards  - simple field-based metric display
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+✔ **Drag-and-drop (DnD)**  (dashboard rearrangement)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+✔ **Field selection & mapping from JSON responses**
+
+✔ **Delete button** for widgets
+
+✔ **Light & dark mode toggle**
+
+✔ **Responsive UI** (mobile → desktop)
+
+✔ **State persistence using Zustand local storage**
+
+✔ **Export/import dashboard configuration**
+
+------------------------------------------------------------------------
+
+##  Setup Instructions
+
+1.  Clone the repository:
+
+    ``` bash
+    git clone <your-repo-url>
+    cd <your-repo>
+    ```
+
+2.  Install dependencies:
+
+    ``` bash
+    pnpm install
+    # or
+    npm install
+    ```
+
+3.  Run the development server:
+
+    ``` bash
+    pnpm dev
+    # or
+    npm run dev
+    ```
+
+4.  Open <http://localhost:3000> in your browser.
+
+------------------------------------------------------------------------
+``` bash
+src/
+│
+├── app/                          # Root app directory 
+│   ├── api/                      # Server routes / API proxies
+│   │   └── fetch/route.ts        # API fetch abstraction layer
+│   ├── globals.css               # Global styles
+│   ├── layout.tsx                # Root layout + theme wrapper
+│   └── page.tsx                  # Main dashboard page (renders widget system)
+│
+├── components/                   # UI and widget building blocks
+│   ├── ui/                       # Reusable shadcn/ui components
+│   │
+│   ├── widgets/                  # dashboard widgets
+│   │   ├── candle-chart-widget.tsx   # Candle  charts
+│   │   ├── card-widget.tsx           # Finance metric cards
+│   │   ├── table-widget.tsx          # Table widget for list data
+│   │   ├── widget-grid.tsx           # Drag-and-drop grid container
+│   │   └── widget-shell.tsx          # Shared wrapper (title, delete, refresh)
+│   ├
+│   ├── add-widget-dialog.tsx         # Modal for adding new widgets
+│   ├── header.tsx                    # Dashboard header with actions
+│   ├── json-explorer.tsx             # Explore API JSON & map fields
+│   ├── theme-provider.tsx            # Light/Dark mode provider
+│   └── widget-config-dialog.tsx      # Widget configuration editor
+│
+├── lib/                         
+│   ├── json-utils.ts             # Dynamic JSON mapper utilities
+│   ├── store.ts                  # Config constants
+│   ├── types.ts                  # Shared TS interfaces/types
+│   └── utils.ts                  # Formatting helpers (currency, date, etc.)
+│
+├── public/                       # Static assets
+│
+└── .env.local                    # API keys & secure environment configs
+
+------------------------------------------------------------------------
+
