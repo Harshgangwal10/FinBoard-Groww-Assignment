@@ -80,6 +80,9 @@ connecting to APIs and displaying real-time financial data through modular widge
 4.  Open <http://localhost:3000> in your browser.
 
 ------------------------------------------------------------------------
+
+## Project Structure
+
 ``` bash
 src/
 │
