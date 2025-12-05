@@ -6,8 +6,11 @@ A fully-responsive Finance Dashboard Builder built with **Next.js 15+**,
 FinBoard enables users to create their own finance monitoring dashboard by
 connecting to APIs and displaying real-time financial data through modular widgets.
 
+------------------------------------------------------------------------
+
 ## 🔗 Live Demo  
- **[Live Demo](https://your-vercel-url.vercel.app/](https://financedashboard-8hmhtrfe8-harshs-projects-87f7c4b0.vercel.app/))**
+[Live Demo](https://financedashboard-8hmhtrfe8-harshs-projects-87f7c4b0.vercel.app/)
+
 
 
 ------------------------------------------------------------------------
