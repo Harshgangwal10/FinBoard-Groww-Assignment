@@ -8,8 +8,22 @@ connecting to APIs and displaying real-time financial data through modular widge
 
 ------------------------------------------------------------------------
 
-## 🔗 Live Demo  
-[Live Demo](https://financedashboard-8hmhtrfe8-harshs-projects-87f7c4b0.vercel.app/)
+## Live Demo  
+[Live Demo](https://financedashboard-fawn.vercel.app/)
+
+------------------------------------------------------------------------
+
+## Screenshot
+
+## Card Widget Screenshot
+
+<img width="1910" height="913" alt="card" src="https://github.com/user-attachments/assets/00b9e493-5c50-4baf-8070-0394c4fab4b7" />
+
+## Table Widget Screenshot
+
+<img width="1919" height="883" alt="image" src="https://github.com/user-attachments/assets/aa06dd9a-a3ed-4116-b18c-3b6088b05f75" />
+
+
 
 
 
@@ -120,4 +134,3 @@ src/
 └── .env.local                    # API keys & secure environment configs
 
 ------------------------------------------------------------------------
-
