@@ -9,7 +9,7 @@ connecting to APIs and displaying real-time financial data through modular widge
 ------------------------------------------------------------------------
 
 ## 🔗 Live Demo  
-[Live Demo](https://financedashboard-8hmhtrfe8-harshs-projects-87f7c4b0.vercel.app/)
+[Live Demo](https://financedashboard-fawn.vercel.app/)
 
 
 
