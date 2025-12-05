@@ -21,7 +21,8 @@ connecting to APIs and displaying real-time financial data through modular widge
 
 ## Table Widget Screenshot
 
-<img width="1915" height="869" alt="image" src="https://github.com/user-attachments/assets/48014b67-ed04-4083-8ceb-2a34eb3dc3e6" />
+<img width="1919" height="883" alt="image" src="https://github.com/user-attachments/assets/aa06dd9a-a3ed-4116-b18c-3b6088b05f75" />
+
 
 
 
