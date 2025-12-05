@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     try {
       data = JSON.parse(text)
     } catch {
-      data = { raw: text } // some endpoints could return CSV/text
+      data = { raw: text } 
     }
     return NextResponse.json(data, { status: 200 })
   } catch (e: any) {

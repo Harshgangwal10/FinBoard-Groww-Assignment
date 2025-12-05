@@ -57,7 +57,7 @@ export function DashboardHeader({
           <Separator orientation="vertical" className="h-4 sm:h-6 hidden sm:block" />
 
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* Desktop: Show all buttons */}
+            {/* Desktop view */}
             <div className="hidden sm:flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={onExport} className="finboard-focus bg-transparent border-accent/40 text-accent">
                 <span className="hidden md:inline">Export</span>
@@ -69,7 +69,7 @@ export function DashboardHeader({
               </Button>
             </div>
 
-            {/* Mobile: Compact export/import */}
+            {/* Mobile view */}
             <div className="flex sm:hidden items-center gap-1">
               <Button variant="ghost" size="sm" onClick={onExport} className="finboard-focus text-xs px-2 text-accent">
                 Exp

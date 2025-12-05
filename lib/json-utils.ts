@@ -1,5 +1,3 @@
-// Utilities for JSON path access and mapping for common finance API shapes
-
 import type { FieldFormat } from "./types"
 
 export function getByPath(obj: any, path: string): any {
@@ -26,13 +24,13 @@ export function formatField(v: any, format: FieldFormat): string {
   return String(v)
 }
 
-// Try to detect an array from a response for table display
+
 export function getArrayFromData(data: any): any[] | null {
   if (!data) return null
   if (Array.isArray(data)) return data
-  // Alpha Vantage "bestMatches" (symbol search)
+  
   if (Array.isArray(data.bestMatches)) return data.bestMatches
-  // Alpha Vantage time series objects -> convert to array of records
+ 
   const seriesKey = Object.keys(data).find((k) => k.toLowerCase().includes("time series"))
   if (seriesKey && data[seriesKey]) {
     const obj = data[seriesKey]
@@ -42,9 +40,9 @@ export function getArrayFromData(data: any): any[] | null {
     }))
     return rows
   }
-  // Finnhub search result
+  
   if (Array.isArray(data.result)) return data.result
-  // Generic: first array value inside object
+  
   for (const v of Object.values(data)) {
     if (Array.isArray(v)) return v
   }
@@ -52,7 +50,7 @@ export function getArrayFromData(data: any): any[] | null {
 }
 
 function normalizeOHLC(ohlc: any) {
-  // Handle keys like "1. open", "2. high" or plain "open"
+ 
   const get = (keys: string[]) => {
     for (const k of keys) {
       if (ohlc[k] != null) return Number(ohlc[k])
@@ -69,7 +67,7 @@ function normalizeOHLC(ohlc: any) {
 }
 
 export function toTimeSeries(data: any, xPath: string, yPath: string) {
-  // Finnhub candles: { t:[unix], o:[], h:[], l:[], c:[], v:[], s:"ok" }
+ 
   if (data && Array.isArray(data?.t) && Array.isArray(data?.c)) {
     const t: number[] = data.t
     const o: any[] = data.o || []
@@ -83,7 +81,7 @@ export function toTimeSeries(data: any, xPath: string, yPath: string) {
       if (k.includes("high")) return row.high
       if (k.includes("low")) return row.low
       if (k.includes("volume") || k === "v") return row.volume
-      // default to close
+      
       return row.close
     }
     const rows = t.map((ts, i) => {
@@ -100,7 +98,7 @@ export function toTimeSeries(data: any, xPath: string, yPath: string) {
     return rows.filter((r) => r.time && Number.isFinite(r.value))
   }
 
-  // Finnhub /quote -> single datapoint { o,h,l,c,t }
+ 
   if (data && typeof data === "object" && ["o", "h", "l", "c"].every((k) => k in data)) {
     const ts = Number.isFinite(Number(data.t)) ? Number(data.t) * 1000 : Date.now()
     const row = {
@@ -122,7 +120,7 @@ export function toTimeSeries(data: any, xPath: string, yPath: string) {
     return [{ time: row.time, value: Number(pick(yPath)) }].filter((r) => Number.isFinite(r.value))
   }
 
-  // Special-case Alpha Vantage time series
+
   const seriesKey = data && Object.keys(data).find((k) => k.toLowerCase().includes("time series"))
   if (seriesKey) {
     const obj = data[seriesKey]
@@ -133,7 +131,7 @@ export function toTimeSeries(data: any, xPath: string, yPath: string) {
     return rows.filter((r) => r.value != null && !isNaN(r.value))
   }
 
-  // Generic: if array present try mapping
+
   const arr = getArrayFromData(data)
   if (arr) {
     return arr

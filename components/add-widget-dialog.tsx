@@ -22,16 +22,20 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
   const [symbol, setSymbol] = useState("AAPL")
   const [refreshMs, setRefreshMs] = useState(60_000)
   const [preview, setPreview] = useState<any>(null)
-  const [paths, setPaths] = useState<string[]>([]) // selected fields
+  const [paths, setPaths] = useState<string[]>([]) 
   const [interval, setInterval] = useState<string>("daily")
   const [format, setFormat] = useState<FieldFormat>("number")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [nameError, setNameError] = useState<string | null>(null)
+  const [previewError, setPreviewError] = useState<string | null>(null)
 
   const addWidget = useDashboardStore((s) => s.addWidget)
 
+
   async function doPreview() {
     setError(null)
+    setPreviewError(null)
     setIsLoading(true)
     setPreview(null)
     try {
@@ -48,60 +52,65 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
       })
       const json = await res.json()
       if (!res.ok) {
-        setError(typeof json?.error === "string" ? json.error : "Fetch failed")
+        setPreviewError(typeof json?.error === "string" ? json.error : "API fetch failed")
       } else {
         setPreview(json)
       }
     } catch (e: any) {
-      setError(e?.message || "Network error")
+      setPreviewError(e?.message || "Network error")
     } finally {
       setIsLoading(false)
     }
   }
 
+  // --- Add Widget ---
   function onAdd() {
+    let hasError = false
+
+    if (!name.trim()) {
+      setNameError("Widget name is required")
+      hasError = true
+    } else {
+      setNameError(null)
+    }
+
+    if (!preview) {
+      setPreviewError("You must fetch API data before adding widget")
+      hasError = true
+    } else {
+      setPreviewError(null)
+    }
+
+    if (hasError) return
+
     const params: Record<string, any> = { ...(symbol ? { symbol } : {}) }
     if (type === "candle") params.interval = interval
 
     const common = {
-      title: name || `${symbol} ${type}`,
-      name: name || `${symbol} ${type}`,
+      title: name,
+      name,
       provider,
       endpoint,
       params,
       refreshMs,
     }
+
     if (type === "card") {
-      addWidget({
-        type,
-        ...common,
-        mapping: { paths, format },
-      } as any)
+      addWidget({ type, ...common, mapping: { paths, format } } as any)
     } else if (type === "table") {
-      addWidget({
-        type,
-        ...common,
-        mapping: { columns: paths },
-      } as any)
-    } else if (type === "candle") {
-      addWidget({
-        type,
-        ...common,
-        mapping: {},
-      } as any)
+      addWidget({ type, ...common, mapping: { columns: paths } } as any)
     } else {
-      // Fallback mapping for untyped widgets
-      addWidget({
-        type,
-        ...common,
-        mapping: {},
-      } as any)
+      addWidget({ type, ...common, mapping: {} } as any)
     }
+
+    // Reset
     onOpenChange(false)
     setPreview(null)
     setPaths([])
     setName("")
     setInterval("daily")
+    setNameError(null)
+    setPreviewError(null)
   }
 
   return (
@@ -112,10 +121,19 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
         </DialogHeader>
 
         <div className="grid gap-4">
+          {/*  Widget Name & Type */}
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Widget Name</Label>
-              <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. AAPL Daily Close" />
+              <Input
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                  if (nameError && e.target.value.trim()) setNameError(null)
+                }}
+                placeholder="AAPL Daily Close"
+              />
+              {nameError && <p className="text-xs text-destructive">{nameError}</p>}
             </div>
             <div className="space-y-1.5">
               <Label>Type</Label>
@@ -132,6 +150,7 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
             </div>
           </div>
 
+          {/* Provider, Endpoint, Symbol, Interval -*/}
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
               <Label>Provider</Label>
@@ -147,20 +166,36 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
             </div>
             <div className="space-y-1.5">
               <Label>Endpoint</Label>
-              <Input value={endpoint} onChange={(e) => setEndpoint(e.target.value)} placeholder="TIME_SERIES_DAILY" />
-              <p className="text-xs text-muted-foreground">Use provider-specific function or path.</p>
+              <Select value={endpoint} onValueChange={(v) => setEndpoint(v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {provider === "alphaVantage" && (
+                    <>
+                      <SelectItem value="TIME_SERIES_DAILY">Daily Series</SelectItem>
+                      <SelectItem value="TIME_SERIES_INTRADAY">Intraday</SelectItem>
+                      <SelectItem value="GLOBAL_QUOTE">Quote</SelectItem>
+                    </>
+                  )}
+                  {provider === "finnhub" && (
+                    <>
+                      <SelectItem value="/quote">Quote</SelectItem>
+                      <SelectItem value="/stock/candle">Candles</SelectItem>
+                      <SelectItem value="/news">News</SelectItem>
+                    </>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
             <div className="space-y-1.5">
               <Label>Symbol</Label>
               <Input value={symbol} onChange={(e) => setSymbol(e.target.value)} placeholder="AAPL" />
             </div>
+
             {type === "candle" && (
               <div className="space-y-1.5">
                 <Label>Interval</Label>
                 <Select value={interval} onValueChange={(v) => setInterval(v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Interval" />
-                  </SelectTrigger>
+                  <SelectTrigger><SelectValue placeholder="Interval" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="daily">Daily</SelectItem>
                     <SelectItem value="weekly">Weekly</SelectItem>
@@ -171,6 +206,7 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
             )}
           </div>
 
+          {/*  Refresh & Format  */}
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
               <Label>Auto Refresh (ms)</Label>
@@ -198,19 +234,16 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
             )}
           </div>
 
+          {/* Test Fetch  */}
           <div className="flex items-center gap-2">
             <Button type="button" onClick={doPreview} disabled={isLoading}>
               {isLoading ? "Testing…" : "Test Fetch"}
             </Button>
-            <p className="text-xs text-muted-foreground">
-              Keys are read on the server in <code className="font-mono">/api/proxy</code>. Configure{" "}
-              <span className="font-mono">ALPHA_VANTAGE_API_KEY</span> /{" "}
-              <span className="font-mono">FINNHUB_API_KEY</span>.
-            </p>
           </div>
+          {previewError && <p className="text-xs text-destructive">{previewError}</p>}
+          {error && <p className="text-xs text-destructive">{error}</p>}
 
-          {error ? <p className="text-xs text-destructive">{error}</p> : null}
-
+          {/* Tabs for JSON Explorer & Field Mapping */}
           <Tabs defaultValue="explore" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="explore">JSON Explorer</TabsTrigger>
@@ -249,11 +282,14 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
             </TabsContent>
           </Tabs>
 
+          {/* Buttons for adding widget and for cancel */}
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)} className="border-accent/40 text-accent hover:bg-accent/10">
               Cancel
             </Button>
-            <Button onClick={onAdd} className="bg-accent text-accent-foreground hover:bg-accent/90">Add Widget</Button>
+            <Button onClick={onAdd} className="bg-accent text-accent-foreground hover:bg-accent/90">
+              Add Widget
+            </Button>
           </div>
         </div>
       </DialogContent>

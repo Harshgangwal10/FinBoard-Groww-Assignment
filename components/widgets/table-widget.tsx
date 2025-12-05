@@ -46,7 +46,7 @@ export function TableWidget({ widget }: { widget: WidgetTable }) {
     return { filteredRows: paginatedRows, totalPages }
   }, [data, query, currentPage, pageSize])
 
-  // --- NEW: Pagination window for max 5 visible buttons ---
+  
   const pageWindowSize = 5
   const { pageStart, pageEnd } = useMemo(() => {
     if (totalPages <= pageWindowSize) return { pageStart: 1, pageEnd: totalPages }
@@ -103,7 +103,7 @@ export function TableWidget({ widget }: { widget: WidgetTable }) {
         </Table>
       </div>
 
-      {/* --- Pagination --- */}
+      {/*  Pagination  */}
       {totalPages > 1 && (
         <div className="w-full flex justify-center mt-2 overflow-x-auto">
           <Pagination className="w-auto">

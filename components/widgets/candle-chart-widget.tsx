@@ -62,11 +62,10 @@ export function CandleChartWidget({ widget }: { widget: Widget }) {
     { refreshInterval: widget.refreshMs, dedupingInterval: 5_000 },
   )
 
-  // Parse OHLC data from API response
   function extractCandleData(apiData: any) {
     if (!apiData) return []
 
-    // Check for Finnhub candle format
+   
     if (apiData.t && Array.isArray(apiData.t) && Array.isArray(apiData.c)) {
       const t: number[] = apiData.t
       const o: number[] = apiData.o || []
@@ -83,10 +82,10 @@ export function CandleChartWidget({ widget }: { widget: Widget }) {
           l: Number(l[i]) || Number(c[i]),
           c: Number(c[i]),
         }))
-        .slice(0, 100) // Last 100 candles
+        .slice(0, 100) 
     }
 
-    // Check for Alpha Vantage time series format
+    
     const seriesKey = Object.keys(apiData).find((k) =>
       k.toLowerCase().includes("time series"),
     )

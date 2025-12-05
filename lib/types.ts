@@ -1,4 +1,4 @@
-// Core types for widgets, providers, and mapping
+// types for widgets, providers, and mapping
 
 export type ProviderId = "alphaVantage" | "finnhub"
 export type WidgetType = "card" | "table" | "candle"

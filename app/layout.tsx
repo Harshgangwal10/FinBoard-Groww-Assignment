@@ -6,7 +6,7 @@ import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: "FinBoard",
-  description: "FinBoard is a modern, Next.js application that enables users to create customizable financial dashboards  by connecting to various financial APIs and displaying real-time data through customizable widgets.",
+  description: " Finance dashboard built with Next.js",
   
 }
 

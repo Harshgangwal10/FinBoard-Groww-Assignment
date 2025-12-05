@@ -4,7 +4,6 @@ import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
 import type { Widget, DashboardExport } from "./types"
 
-// add hasSeenTour state and setter to persist onboarding status
 type WidgetInput = Omit<Widget, "id"> & { title?: string; name?: string }
 
 type State = {
@@ -36,7 +35,7 @@ function createWidget(w: WidgetInput): Widget {
 export const useDashboardStore = create<State>()(
   persist(
     (set, get) => ({
-      // initialize onboarding flag
+     
       hasSeenTour: false,
       setHasSeenTour: (v) => set(() => ({ hasSeenTour: v })),
       widgets: [],
@@ -70,19 +69,19 @@ export const useDashboardStore = create<State>()(
     {
       name: "finboard-dashboard",
       storage: typeof window !== "undefined" ? createJSONStorage(() => localStorage) : undefined,
-      // migrate any persisted widgets with type 'line' to 'candle' on rehydrate
+   
       onRehydrateStorage: (store) => (persistedState) => {
         try {
           const persisted = (persistedState as any)?.state?.widgets ?? (persistedState as any)?.widgets
           if (Array.isArray(persisted) && persisted.length) {
             const migrated = persisted.map((w: any) => (w?.type === "line" ? { ...w, type: "candle" } : w))
-            // update the persisted snapshot if present
+           
             if (persistedState && (persistedState as any).state) (persistedState as any).state.widgets = migrated
-            // update the live store
+        
             if (store && typeof (store as any).setState === "function") (store as any).setState({ widgets: migrated })
           }
         } catch (e) {
-          // ignore migration errors
+          
         }
       },
     },

@@ -71,9 +71,6 @@ export default function Page() {
         {widgets.length === 0 ? (
           <div className="grid place-items-center min-h-[70vh]">
             <div className="finboard-card max-w-2xl w-full p-8 text-center">
-              <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <div className="size-8 rounded bg-primary/20" aria-hidden />
-              </div>
               <h2 className="text-2xl font-bold finboard-text-balance mb-4">Build Your Finance Dashboard</h2>
               <p className="text-muted-foreground finboard-text-balance mb-8 max-w-lg mx-auto">
                 Connect to financial APIs like Alpha Vantage and Finnhub. 
@@ -117,8 +114,6 @@ export default function Page() {
         ))}
 
         {provided.placeholder}
-
-        {/* ADD WIDGET TILE */}
         <div
           className="finboard-card border-dashed border-2 border-primary/30 
                      hover:border-primary/50 bg-primary/5 hover:bg-primary/10 
@@ -131,7 +126,7 @@ export default function Page() {
               <span className="text-2xl text-primary">+</span>
             </div>
             <h3 className="font-semibold text-primary mb-2">Add Widget</h3>
-            <p className="text-sm text-muted-foreground">Create a new data visualization</p>
+            <p className="text-sm text-muted-foreground">Connect to Finance API and create a custom widget</p>
           </div>
         </div>
       </div>
