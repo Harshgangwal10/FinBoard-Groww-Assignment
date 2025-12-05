@@ -63,7 +63,6 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
     }
   }
 
-  // --- Add Widget ---
   function onAdd() {
     let hasError = false
 
@@ -103,7 +102,6 @@ export function AddWidgetDialog({ open, onOpenChange }: Props) {
       addWidget({ type, ...common, mapping: {} } as any)
     }
 
-    // Reset
     onOpenChange(false)
     setPreview(null)
     setPaths([])

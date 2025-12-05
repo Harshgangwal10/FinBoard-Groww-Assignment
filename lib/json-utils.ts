@@ -12,17 +12,17 @@ export function getByPath(obj: any, path: string): any {
   }, obj)
 }
 
-export function formatField(v: any, format: FieldFormat): string {
-  if (v == null || v === "") return "-"
-  const num = Number(v)
+export function formatField(v: any, format?: FieldFormat): string { 
+  if (v == null || v === "") return "-";
+  const num = Number(v);
   if (!isNaN(num)) {
-    if (format === "currency") return num.toLocaleString(undefined, { style: "currency", currency: "USD" })
-    if (format === "percent")
-      return (num / 100).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 2 })
-    return num.toLocaleString()
+    if (format === "currency") return num.toLocaleString(undefined, { style: "currency", currency: "USD" });
+    if (format === "percent") return (num / 100).toLocaleString(undefined, { style: "percent", minimumFractionDigits: 2 });
+    return num.toLocaleString();
   }
-  return String(v)
+  return String(v);
 }
+
 
 
 export function getArrayFromData(data: any): any[] | null {
@@ -46,6 +46,7 @@ export function getArrayFromData(data: any): any[] | null {
   for (const v of Object.values(data)) {
     if (Array.isArray(v)) return v
   }
+  if (typeof data === 'object' && data !== null && !Array.isArray(data)) return [data]
   return null
 }
 

@@ -33,9 +33,21 @@ export function TableWidget({ widget }: { widget: WidgetTable }) {
     setCurrentPage(1)
   }, [query])
 
-  const { filteredRows, totalPages } = useMemo(() => {
+  const { filteredRows, totalPages, columns } = useMemo(() => {
     const arr = getArrayFromData(data)
-    if (!arr) return { filteredRows: [], totalPages: 0 }
+    if (!arr) return { filteredRows: [], totalPages: 0, columns: [] }
+
+    let columns = widget.mapping.columns
+    if (!columns || columns.length === 0) {
+      const allKeys = new Set<string>()
+      arr.forEach((row: any) => {
+        if (typeof row === 'object' && row !== null) {
+          Object.keys(row).forEach(key => allKeys.add(key))
+        }
+      })
+      columns = Array.from(allKeys)
+    }
+
     const filtered = query
       ? arr.filter((row: any) => JSON.stringify(row).toLowerCase().includes(query.toLowerCase()))
       : arr
@@ -43,8 +55,8 @@ export function TableWidget({ widget }: { widget: WidgetTable }) {
     const startIndex = (currentPage - 1) * pageSize
     const endIndex = startIndex + pageSize
     const paginatedRows = filtered.slice(startIndex, endIndex)
-    return { filteredRows: paginatedRows, totalPages }
-  }, [data, query, currentPage, pageSize])
+    return { filteredRows: paginatedRows, totalPages, columns }
+  }, [data, query, currentPage, pageSize, widget.mapping.columns])
 
   
   const pageWindowSize = 5
@@ -86,25 +98,34 @@ export function TableWidget({ widget }: { widget: WidgetTable }) {
         <Table className="w-full">
           <TableHeader>
             <TableRow>
-              {widget.mapping.columns.map((c) => (
+              {columns.map((c) => (
                 <TableHead key={c}>{c}</TableHead>
               ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredRows.map((row: any, idx: number) => (
-              <TableRow key={idx}>
-                {widget.mapping.columns.map((c) => (
-                  <TableCell key={c}>{String(getByPath(row, c) ?? "")}</TableCell>
-                ))}
+            {filteredRows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="text-center text-muted-foreground">
+                  No data to display
+                </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              filteredRows.map((row: any, idx: number) => (
+                <TableRow key={`${currentPage}-${idx}`}>
+                  {columns.map((c) => (
+                    <TableCell key={c}>{String(getByPath(row, c) ?? "")}</TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
 
       {/*  Pagination  */}
-      {totalPages > 1 && (
+      {totalPages > 1 && filteredRows.length > 0 && (
+
         <div className="w-full flex justify-center mt-2 overflow-x-auto">
           <Pagination className="w-auto">
             <PaginationContent>

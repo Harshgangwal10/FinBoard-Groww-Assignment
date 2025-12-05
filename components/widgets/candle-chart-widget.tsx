@@ -3,7 +3,7 @@
 import useSWR from "swr"
 import type { Widget } from "@/lib/types"
 import { Loader2 } from "lucide-react"
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Chart as ChartJS,
@@ -76,7 +76,7 @@ export function CandleChartWidget({ widget }: { widget: Widget }) {
 
       return t
         .map((ts, i) => ({
-          x: new Date(ts * 1000),
+          x: typeof ts === "number" ? new Date(ts * 1000) : new Date(ts),
           o: Number(o[i]) || Number(c[i]),
           h: Number(h[i]) || Number(c[i]),
           l: Number(l[i]) || Number(c[i]),
@@ -117,16 +117,14 @@ export function CandleChartWidget({ widget }: { widget: Widget }) {
   const candles = extractCandleData(data)
 
   const chartData = {
-    datasets: [{
-      label: 'Candlestick',
-      data: candles,
-      color: {
-        up: '#22c55e',
-        down: '#ef4444',
-        unchanged: '#6b7280',
-      },
-    }],
-  }
+  datasets: [{
+    label: 'Candlestick',
+    data: candles,
+   upColor: "#22c55e",
+    downColor: "#ef4444",
+    borderColor: "#000000",
+  }]
+};
 
   const options: any = {
     responsive: true,
