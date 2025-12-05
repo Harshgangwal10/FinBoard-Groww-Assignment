@@ -36,7 +36,7 @@ export function WidgetShell({
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex items-center gap-1.5 transition-opacity">
           {onConfig && (
             <Button
               variant="ghost"

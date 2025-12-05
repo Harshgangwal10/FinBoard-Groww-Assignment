@@ -10,6 +10,7 @@ import { WidgetShell } from "@/components/widgets/widget-shell"
 import { CardWidget } from "@/components/widgets/card-widget"
 import { TableWidget } from "@/components/widgets/table-widget"
 import { CandleChartWidget } from "@/components/widgets/candle-chart-widget"
+import { WidgetConfigDialog } from "@/components/widget-config-dialog"
 import { cn } from "@/lib/utils"
 
 function useThemeToggle() {
@@ -32,10 +33,17 @@ export default function Page() {
   const reorder = useDashboardStore((s) => s.reorder)
   const removeWidget = useDashboardStore((s) => s.removeWidget)
   const [isAddOpen, setAddOpen] = useState(false)
+  const [configDialogOpen, setConfigDialogOpen] = useState(false)
+  const [configWidget, setConfigWidget] = useState<any>(null)
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return
     reorder(result.source.index, result.destination.index)
+  }
+
+  const handleConfig = (widget: any) => {
+    setConfigWidget(widget)
+    setConfigDialogOpen(true)
   }
 
   return (
@@ -103,7 +111,7 @@ export default function Page() {
                   snapshot.isDragging ? "opacity-80 scale-105" : "opacity-100"
                 )}
               >
-                <WidgetShell widget={w} onRemove={() => removeWidget(w.id)}>
+                <WidgetShell widget={w} onRemove={() => removeWidget(w.id)} onConfig={() => handleConfig(w)}>
                   {w.type === "card" && <CardWidget widget={w} />}
                   {w.type === "table" && <TableWidget widget={w} />}
                   {w.type === "candle" && <CandleChartWidget widget={w} />}
@@ -138,6 +146,11 @@ export default function Page() {
       </section>
 
       <AddWidgetDialog open={isAddOpen} onOpenChange={setAddOpen} />
+      <WidgetConfigDialog
+        open={configDialogOpen}
+        onOpenChange={setConfigDialogOpen}
+        widget={configWidget}
+      />
     </main>
   )
 }
