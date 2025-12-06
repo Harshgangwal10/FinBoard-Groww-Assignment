@@ -95,6 +95,76 @@ connecting to APIs and displaying real-time financial data through modular widge
 
 ------------------------------------------------------------------------
 
+## Usage
+
+## Adding a Widget
+
+1. Click the "Add Widget" button
+2. Enter a widget name (e.g., "Bitcoin Price Tracker")
+3. Select widget type (Finance Card, Table, or Chart)
+4. Select Provider ( Alpha Vantage, Finnhub )
+5. Select Endpoint
+6. Set refresh interval in seconds
+7. Select Format
+8. Test Api
+9. Select the fields you want to display from the API response
+10. Click "Add Widget"
+
+## Configuring a Widget
+
+1. Click the gear icon (⚙️) on any widget
+2. Modify widget name, API URL, refresh interval, or selected fields
+3. Click "Save Changes"
+   
+## Rearranging Widgets
+
+1. Click and hold the drag handle (⋮⋮) on any widget
+2. Drag to the desired position
+3. Release to drop
+
+## Removing a Widget
+1. Click the delete button on any widget
+   
+------------------------------------------------------------------------
+
+## API Integration Guide
+
+This project connects to two real-time financial data providers:
+
+##  1. FinClub API
+**Used for**:
+
+ 1. Market summaries
+ 2. Stock listings
+ 3. Card metrics
+ 4. Table mappings
+
+✔ Fetches stock market values
+
+✔ Supports table + card visuals
+
+##  2. Alpha Vantage API
+
+**Used for**:
+
+  1. Global price quotes
+  2. Daily/weekly candles
+  3. Chart time-series feeds
+
+✔ Global Quote endpoint
+
+✔ Time-series endpoints
+
+
+**Both APIs are connected using environment variables:**
+
+    NEXT_PUBLIC_FINCLUB_API_KEY=your_key_here
+    NEXT_PUBLIC_ALPHA_API_KEY=your_key_here
+
+
+------------------------------------------------------------------------
+
+
 ## Project Structure
 
 ``` bash
